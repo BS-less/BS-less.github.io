@@ -1,7 +1,15 @@
 <aside>
     <ul>
-	{%- for page in collections.all | sidebarFilter(page.url, collections) -%}
-	    <li><a href="{{ page.url }}">{{ page.fileSlug }}</a></li>
+	{%- for link in collections.all | sidebarFilter(page.url, collections) -%}
+	    <li
+	    {% if page.url == link.url %}
+		aria-current="page" class="selected"
+	    {% endif %}
+	    >
+		<a href="{{ link.url }}">
+		    {{ link.fileSlug }}
+		</a>
+	    </li>
 	{%- endfor -%}
     </ul>
 </aside>

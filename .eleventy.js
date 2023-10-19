@@ -1,6 +1,42 @@
+const markdownIt = require('markdown-it');
+const markdownItAnchor = require('markdown-it-anchor');
+
 module.exports = function(config) {
     config.addPassthroughCopy({ './src/_resources/': '.' });
     config.addWatchTarget('./src/_resources');
+
+    const markdownLib = markdownIt({ html: true })
+    .use(markdownItAnchor, {
+	level: 2,
+	permalink: markdownItAnchor.permalink.headerLink({ safariReaderFix: true }),
+    });
+    config.setLibrary('md', markdownLib);
+
+    // gets the navbar items
+    config.addFilter('getNavItems', (collections, url) => {
+	let currentUrl = url.split('/')[1];
+
+	const links = [{
+	    rootUrl: '/',
+	    name: 'home',
+	    selected: !(currentUrl in collections) }
+	];
+	for (const key in collections) {
+	    // ignore this collection
+	    if (key === 'all' || key == 'home') continue;
+
+	    links.push({ rootUrl: `/${key}/about/`, name: key, selected: currentUrl === key });
+	}
+
+	// sort the links while leaving 'home' first
+	return links.toSorted((a, b) => {
+	    if (a.name === 'home') return -1;
+	    if (b.name === 'home') return 1;
+	    if (a.name > b.name) return 1;
+	    if (a.name < b.name) return -1;
+	    return 0;
+	});
+    });
 
     // gets all the sidebar links and filters them based on the current url
     config.addFilter('sidebarFilter', (arr, url, collections) => {
