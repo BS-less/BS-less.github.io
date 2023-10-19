@@ -1,6 +1,6 @@
 ---
 permalink: /
 ---
-# About bs-less.org
+# bs-less.org
 
 This site is under construction...
