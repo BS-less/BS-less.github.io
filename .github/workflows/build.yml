@@ -31,3 +31,6 @@ jobs:
         with:
           publish_dir: ./build
           github_token: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+    actions: write-all
