@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BSless</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script src="/js/theme.js"></script>
+  <body>
+    <header>
+    <p id="logo">bs-less.org</p>
+    <nav>
+	<ul><li
+		
+		>
+		    <a href="/">home</a>
+		</li><li
+		
+		    aria-current="page" class="selected"
+		
+		>
+		    <a href="/bson/about/">bson</a>
+		</li></ul>
+    </nav>
+
+</header>
+
+
+    <aside>
+    <ul><li
+	    
+	    >
+		<a href="/bson/about/">
+		    about
+		</a>
+	    </li><li
+	    
+		aria-current="page" class="selected"
+	    
+	    >
+		<a href="/bson/specs/">
+		    specs
+		</a>
+	    </li></ul>
+</aside>
+
+
+    <main>
+	<h1>BS-less Object Notation specification 23.0.0 (BSON23)</h1>
+<h2 id="overview-of-bson" tabindex="-1"><a class="header-anchor" href="#overview-of-bson"><span>Overview of BSON</span></a></h2>
+<ul>
+<li>BSON is designed as a general purpose application based object notation (not designed for web or JavaScript in mind)</li>
+<li>Store integers, floating points, arrays, objects, and arrays/objects containing more of the before mentioned</li>
+<li>BS-less:
+<ul>
+<li>Many symbols could have been implicit</li>
+<li>Remove bloat and dependencies</li>
+<li>&lt; 1.0% makefile</li>
+</ul>
+</li>
+</ul>
+<h2 id="overview-of-23.0.0-(replacement-of-bson-prototype)" tabindex="-1"><a class="header-anchor" href="#overview-of-23.0.0-(replacement-of-bson-prototype)"><span>Overview of 23.0.0 (Replacement of BSON-prototype)</span></a></h2>
+<ul>
+<li>Full and intuitive replacement of BSON-prototype</li>
+<li>Utilize tree structure to organize and read from BSON text
+<ul>
+<li>Full potential of the scopes</li>
+</ul>
+</li>
+<li>Passing of BSON text as apposed to a file path to a BSON file</li>
+<li>Introduction of BSON node</li>
+<li>Removal of hash map for this version
+<ul>
+<li>Later version may  reimplement for optimization reasons</li>
+</ul>
+</li>
+<li>Removal of any automatic data retrieval for this version
+<ul>
+<li>Designing integral functionality (tree, memory management)</li>
+<li>Will reimplement in a later version</li>
+</ul>
+</li>
+</ul>
+<h2 id="library" tabindex="-1"><a class="header-anchor" href="#library"><span>Library</span></a></h2>
+<h3 id="node" tabindex="-1"><a class="header-anchor" href="#node"><span>Node</span></a></h3>
+<p>Each node is a node in a tree that represents the parsed BSON</p>
+<pre><code class="language-c">typedef struct bs_bsonnode {
+	const char *key;
+	union {
+		long                  lng;
+		double                dbl;
+		char                 *str;
+		struct bs_bsonnode   *arr;
+		struct bs_bsonnode   *obj;
+	};
+	size_t numchildren;
+	bsonenum flags;
+} bsonnode;
+</code></pre>
+<h3 id="read-bson" tabindex="-1"><a class="header-anchor" href="#read-bson"><span>Read BSON</span></a></h3>
+<p>Creates a tree based off the BSON code and returns the root of that tree.</p>
+<pre><code class="language-c">bsonnode *bson_parse(const char * const code);
+</code></pre>
+<h3 id="free-bson" tabindex="-1"><a class="header-anchor" href="#free-bson"><span>Free BSON</span></a></h3>
+<p>Free the tree back to memory.</p>
+<pre><code class="language-c">void bson_free(bsonnode **root);
+</code></pre>
+<h3 id="getting-a-node-from-the-tree" tabindex="-1"><a class="header-anchor" href="#getting-a-node-from-the-tree"><span>Getting a node from the tree</span></a></h3>
+<p>Search the tree relative to the give node <code>obj</code>. Only gets immediate children of <code>obj</code>.</p>
+<pre><code class="language-c">bsonnode *bson_get(const bsonnode * const obj, const char * const key);
+</code></pre>
+<h2 id="syntax" tabindex="-1"><a class="header-anchor" href="#syntax"><span>Syntax</span></a></h2>
+<h3 id="integers" tabindex="-1"><a class="header-anchor" href="#integers"><span>Integers</span></a></h3>
+<p>All integers are represented as 8 byte signed integers, syntactically has no decimal places.</p>
+<pre><code>myinteger 1
+</code></pre>
+<h3 id="decimals" tabindex="-1"><a class="header-anchor" href="#decimals"><span>Decimals</span></a></h3>
+<p>Decimals are represented as 8 byte floating points, syntactically has a one decimal place.</p>
+<pre><code>mydecimal 3.14
+</code></pre>
+<h3 id="strings" tabindex="-1"><a class="header-anchor" href="#strings"><span>Strings</span></a></h3>
+<p>Strings have quotes around them, as god intended.</p>
+<pre><code>mystring &quot;Very cool!&quot;
+</code></pre>
+<h3 id="arrays" tabindex="-1"><a class="header-anchor" href="#arrays"><span>Arrays</span></a></h3>
+<p>Arrays have a bracket surrounding the series of data. Unfortunately, they are sets of any type.</p>
+<pre><code>myarray [
+	1 2.2 &quot;Hello&quot; 1 &quot;3&quot; 2.1
+]
+</code></pre>
+<h3 id="objects" tabindex="-1"><a class="header-anchor" href="#objects"><span>Objects</span></a></h3>
+<p>Objects use braces around the series of data. With BSON23 all data must have a left hand name associated with it like other data.</p>
+<pre><code>myobject {
+	myinteger  1
+	mydecimal 3.14
+	mystring &quot;Hello World!&quot;
+	myarray [ 1 2 3 4 ]
+}
+</code></pre>
+<h3 id="combining" tabindex="-1"><a class="header-anchor" href="#combining"><span>Combining</span></a></h3>
+<p>The aforementioned data can be combined for organization purposes</p>
+<pre><code>info {
+	name &quot;Dave&quot;
+	version &quot;1.1.2&quot;
+}
+friends [
+	{ name &quot;alex&quot; age 33 }
+	{ name &quot;james&quot; age 24 }
+	{ name &quot;josie&quot; age 5 species &quot;dog&quot; }
+]
+scope {
+	array [ &quot;What&quot; 1 &quot;is&quot; 2 &quot;this&quot; 3.3 &quot;crap&quot; ]
+	reference {
+		id 4
+		places [ 0 1 3 ]
+	}
+}
+</code></pre>
+<h2 id="usage" tabindex="-1"><a class="header-anchor" href="#usage"><span>Usage</span></a></h2>
+<h3 id="hello-world" tabindex="-1"><a class="header-anchor" href="#hello-world"><span>Hello world</span></a></h3>
+<pre><code>hello &quot;Hello&quot;
+world &quot;World!&quot;
+special 32
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+#include &lt;bson/bson.h&gt;
+
+int main(void) {
+	char *file = /* read file */
+	bsonnode *root = bson_parse(file);
+	/* Check if NULL */
+	
+	bsonnode *hello = bson_get(root, &quot;hello&quot;);
+	bsonnode *world = bson_get(root, &quot;world&quot;);
+	printf(&quot;%s %s\n&quot;, hello-&gt;str, world-&gt;str);
+	bsonnode *special = bson_get(root, &quot;special&quot;);
+	printf(&quot;%ld\n&quot;, special-&gt;lng);
+
+	bson_free(root);
+	free(file);
+	return 0;
+}
+</code></pre>
+<h3 id="bigger-example" tabindex="-1"><a class="header-anchor" href="#bigger-example"><span>Bigger example</span></a></h3>
+<pre><code>integer 5
+double  6.6
+array [ &quot;Hello&quot; 2 &quot;Beautiful&quot; &quot;World&quot; 66.6 ]
+scope {
+	object {
+		first &quot;Jeff&quot;
+		last &quot;Dungus&quot;
+	}
+}
+</code></pre>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+#include &lt;bson/bson.h&gt;
+
+int main(void) {
+	char *file = /* read file */
+	bsonnode *root = bson_parse(file);
+	/* Check if NULL */
+	
+	bsonnode *node = bson_get(root, &quot;integer&quot;);
+	printf(&quot;%ld\n&quot;, node-&gt;lng);
+	
+	node = bson_get(root, &quot;double&quot;);
+	printf(&quot;%ld\n&quot;, node-&gt;dbl);
+
+	node = bson_get(root, &quot;array&quot;);
+	size_t i;
+	for(i = 0; i &lt; node-&gt;numchildren; i++) {
+		if(node-&gt;arr[i].type == BSON_STRING)
+			printf(&quot;%s &quot;, node-&gt;arr[i].str);
+	}
+	putchar('\n');
+
+	node = bson_get(root, &quot;scope&quot;);
+	node = bson_get(node, &quot;object&quot;);
+	for(i = 0; i &lt; node-&gt;numchildren; i++) {
+		if(node-&gt;arr[i].type == BSON_STRING)
+			printf(&quot;%s: \&quot;%s\&quot; &quot;, node-&gt;arr[i].key, node-&gt;arr[i].str);
+	}
+	putchar('\n');
+	node = bson_get(node, &quot;last&quot;);
+	if(node-&gt;type == BSON_STRING)
+		printf(&quot;%s\n&quot;, node-&gt;str);
+	
+	bson_free(root);
+	free(file);
+	return 0;
+}
+</code></pre>
+
+    </main>
+  </body>
+</html>
