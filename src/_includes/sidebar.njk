@@ -1,0 +1,7 @@
+<aside>
+    <ul>
+	{%- for page in collections.all | sidebarFilter(page.url, collections) -%}
+	    <li><a href="{{ page.url }}">{{ page.fileSlug }}</a></li>
+	{%- endfor -%}
+    </ul>
+</aside>

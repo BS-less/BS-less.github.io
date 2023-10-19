@@ -1,0 +1,51 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, Roboto, Helvetica, Arial; 
+}
+
+/* Main Styling */
+a { color: inherit }
+
+body { color: #222 }
+
+header {
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+#logo { font-size: 1.4em; margin-right: 2em }
+
+nav li {
+    display: inline;
+    margin-right: 1em;
+}
+
+aside {
+    float: left;
+    width: 150px;
+    padding: 1em;
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
+}
+aside li {
+    list-style: none;
+    margin-bottom: 1em;
+    text-align: right;
+}
+
+main {
+    margin-left: 150px;
+    padding: 1.5em;
+}
+
+/* Markdown */
+h1 { font-size: 1.4em; }
+h2 { font-size: 1.3em; }
+h1, h2, h3, h4, h5 { margin: 1em 0 }
+main li { margin-left: 15px }
+pre { background: #eee; padding: 10px; }
+code { font-family: monospace; font-size: 1.2em; }

@@ -1,0 +1,4 @@
+{
+    "tags": "home",
+    "permalink": "/{{ page.fileSlug }}/"
+}
