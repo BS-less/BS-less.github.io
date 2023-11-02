@@ -28,17 +28,17 @@
     <aside>
     <ul><li
 	    
+	    >
+		<a href="/bson/BSON23.0/">
+		    BSON23.0
+		</a>
+	    </li><li
+	    
 		aria-current="page" class="selected"
 	    
 	    >
 		<a href="/bson/about/">
 		    about
-		</a>
-	    </li><li
-	    
-	    >
-		<a href="/bson/specs/">
-		    specs
 		</a>
 	    </li></ul>
 </aside>
@@ -46,7 +46,53 @@
 
     <main>
 	<h1>BS-less Object Notation</h1>
-<p>BSON is designed as a general purpose application based object notation (not designed for web or JavaScript in mind)</p>
+<p>BSON is designed as a general purpose application based object notation (not designed for web or JavaScript in mind). BSON removes syntax that is unnecessary or counter-intuitive.</p>
+<h3 id="significant-syntactical-changes" tabindex="-1"><a class="header-anchor" href="#significant-syntactical-changes"><span>Significant syntactical changes</span></a></h3>
+<ul>
+<li>Keys no longer have quotes around them.</li>
+<li>Commas removed.</li>
+<li>The BSON is inherintly and object, it does not require top level braces.</li>
+</ul>
+<h3 id="significant-similarities-of-bson-%26-json" tabindex="-1"><a class="header-anchor" href="#significant-similarities-of-bson-%26-json"><span>Significant similarities of BSON &amp; JSON</span></a></h3>
+<ul>
+<li>Support of
+<ul>
+<li>Integers &amp; floating point</li>
+<li>Strings</li>
+<li>Arrays &amp; Objects</li>
+</ul>
+</li>
+<li>Arrays are typeless</li>
+</ul>
+<h3 id="documentation" tabindex="-1"><a class="header-anchor" href="#documentation"><span><a href="404">Documentation</a></span></a></h3>
+<h3 id="source" tabindex="-1"><a class="header-anchor" href="#source"><span><a href="https://github.com/bs-less/BSON">Source</a></span></a></h3>
+<h4 id="notes" tabindex="-1"><a class="header-anchor" href="#notes"><span>Notes</span></a></h4>
+<ul>
+<li>BSON is still in development, both the language and the official library.</li>
+<li>The official library follows variations of BSON23.
+<ul>
+<li>BSON23.X may not be compatible with their counter part versions.</li>
+<li>BSON24.X and future versions will remain backwards compatible with the final version of BSON23.</li>
+</ul>
+</li>
+</ul>
+<pre><code>bson {
+    info {
+        spec   &quot;23.1&quot;
+        date   &quot;Nov-2-23&quot;
+        model  &quot;bs-less&quot;
+    }
+    contrib {
+        authors [
+            &quot;LoneC&quot;
+            &quot;CoherentNonsense&quot;
+        ]
+//      other [
+//
+//      ]
+    }
+}
+</code></pre>
 
     </main>
   </body>

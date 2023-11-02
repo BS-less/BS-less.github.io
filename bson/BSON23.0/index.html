@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>bs-less</title>
+    <link rel="icon" type="image/x-icon" href="/site/bs-less.png" />
+	<link rel="stylesheet" href="/css/styles.css" />
+  <body>
+    <header>
+    <img src="/site/bs-less.png" alt="bs-less logo">
+    <nav>
+	<ul><li
+		
+		>
+		    <a href="/">home</a>
+		</li><li
+		
+		    aria-current="page" class="selected"
+		
+		>
+		    <a href="/bson/about/">bson</a>
+		</li></ul>
+    </nav>
+
+</header>
+
+
+    <aside>
+    <ul><li
+	    
+		aria-current="page" class="selected"
+	    
+	    >
+		<a href="/bson/BSON23.0/">
+		    BSON23.0
+		</a>
+	    </li><li
+	    
+	    >
+		<a href="/bson/about/">
+		    about
+		</a>
+	    </li></ul>
+</aside>
+
+
+    <main>
+	<h1>BS-less Object Notation Specification 23 (BSON23)</h1>
+<h4 id="october-29th%2C-2023" tabindex="-1"><a class="header-anchor" href="#october-29th%2C-2023"><span>October 29th, 2023</span></a></h4>
+<h2 id="bson-overview" tabindex="-1"><a class="header-anchor" href="#bson-overview"><span>BSON Overview</span></a></h2>
+<p>BSON is a general purpose replacement of JSON. It is not developed with web and JavaScript 100% in mind.
+This specification covers the syntax of BSON.
+Bson can store:</p>
+<ul>
+<li>
+<ul>
+<li>Longs/integers (64 bit)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Floating points (64 bit)</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Strings</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Objects</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Arrays</li>
+</ul>
+</li>
+</ul>
+<h2 id="specification-23.0-overview" tabindex="-1"><a class="header-anchor" href="#specification-23.0-overview"><span>Specification 23.0 Overview</span></a></h2>
+<p>To summarize, BSON is the same as JSON with these notable syntax changes as of this specification.</p>
+<ul>
+<li>- No colons</li>
+<li>- Quotes only surround string data</li>
+<li>- No commas between data</li>
+<li>
+<ul>
+<li>C style comments '//'</li>
+</ul>
+</li>
+</ul>
+<h1>Usage</h1>
+<h2 id="comments" tabindex="-1"><a class="header-anchor" href="#comments"><span>Comments</span></a></h2>
+<p>To write comments, use '//'. All the data preceding it is ignored until the next line.</p>
+<pre><code>// This is a comment
+</code></pre>
+<h2 id="key-names" tabindex="-1"><a class="header-anchor" href="#key-names"><span>Key names</span></a></h2>
+<p>In order to write data a name must be associated with it, which will be referred to as a key. The rules for the key name for BSON23 is currently:</p>
+<ul>
+<li>Only letters a-z/A-Z and underscores</li>
+<li>Numbers can appear only after the first letter</li>
+<li>No symbols... except underscores.
+These are valid examples of key names.</li>
+</ul>
+<pre><code>keyname      ...
+key_name     ...
+_key_name    ...
+key123name   ...
+keyname123   ...
+_key_name123 ...
+</code></pre>
+<p>These are invalid examples of key names.</p>
+<pre><code>1keyname     ...
+#key-name    ...
+key-name     ...
+key*name     ...
+</code></pre>
+<h2 id="longs" tabindex="-1"><a class="header-anchor" href="#longs"><span>Longs</span></a></h2>
+<p>Integers are stored as 64 bit integers. These are referred to as longs. To create a long you specify the name, some whitespace, then the number.</p>
+<pre><code>myinteger 3
+</code></pre>
+<h2 id="floating-points" tabindex="-1"><a class="header-anchor" href="#floating-points"><span>Floating points</span></a></h2>
+<p>Floating point numbers are stored as 64 bit doubles. To create a double you specify the name, some whitespace, then the number with at least one digit and one decimal point. The following are examples of valid doubles.</p>
+<pre><code>dec1 3.14
+dec2 2.0
+dec3 1.
+dec4 0.
+dec5 .0
+</code></pre>
+<p>These are not valid doubles.</p>
+<pre><code>mydecimal        5 // This is an integer
+anotherdecimal   . // This is a syntax error
+</code></pre>
+<h2 id="strings" tabindex="-1"><a class="header-anchor" href="#strings"><span>Strings</span></a></h2>
+<p>Strings as of this version are anything inbetween two matching quotes.</p>
+<pre><code>mystring &quot;Hello World!&quot;
+</code></pre>
+<p>Escape sequences are planned in the future.</p>
+<h2 id="objects" tabindex="-1"><a class="header-anchor" href="#objects"><span>Objects</span></a></h2>
+<p>Objects are defined with braces, '{' and '}'. Inside the braces you can put any data inside so long it follows the previously associated syntax.</p>
+<pre><code>person {
+    first &quot;John&quot;
+    last &quot;Doe&quot;
+    age 33
+}
+</code></pre>
+<h2 id="arrays" tabindex="-1"><a class="header-anchor" href="#arrays"><span>Arrays</span></a></h2>
+<p>Arrays behave similarly to objects except that the name does no longer gets specified. Types in arrays do not matter. Arrays are defined with brackets, '[' and ']'.</p>
+<pre><code>ints [ 1 2 3 4 ]
+decs [ 2.2 3.3 4.4 ]
+</code></pre>
+<p>They can also store objects</p>
+<pre><code>vecs [
+    { x 1 y 2 }
+    { x 3 y 4 }
+    { x 5 y 6 }
+]
+people [
+    {
+        first &quot;John&quot;
+        last &quot;Doe&quot;
+        age 33
+    }
+    {
+        first &quot;Jane&quot;
+        lsat &quot;Doe&quot;
+        age 32
+    }
+]
+</code></pre>
+<p>As mentioned, they all do not have to be the same type</p>
+<pre><code>array [
+    4
+    2.71
+    &quot;String!&quot;
+    arr2 [ 
+        1 
+        &quot;Wow&quot; 
+        { x 1 y 2 } 
+    ]
+    obj {
+        number 6
+        friend &quot;alfred&quot;
+    }
+    coherently &quot;nonsense&quot;
+]
+</code></pre>
+
+    </main>
+  </body>
+</html>
