@@ -1,4 +1,4 @@
-# BS-less Object Notation Specification 23 (BSON23)
+# BS-less Object Notation Specification 23.0 (BSON23.0)
 #### October 29th, 2023
 ## BSON Overview
 BSON is a general purpose replacement of JSON. It is not developed with web and JavaScript 100% in mind.
